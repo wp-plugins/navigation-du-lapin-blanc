@@ -14,7 +14,7 @@ This plugin provides integrated navigation for your website. Thus you can use Wo
 
 == Installation ==
 
-1. Upload the all plugin files to the `/wp-content/plugins/` directory or a special directory e.g. `/wp-content/plugins/navigation-du-lapin-blanc` 
+1. Upload all plugin files to the `/wp-content/plugins/` directory or a special directory e.g. `/wp-content/plugins/navigation-du-lapin-blanc` 
 1. Activate the plugin through the 'Plugins' menu in WordPress
 1. Edit your templates to use the navigation provided by the plugin.
 
