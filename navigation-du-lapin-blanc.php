@@ -2,13 +2,13 @@
 /**
  * @package Bjoerne
  * @subpackage NavigationDuLapinBlanc
- * @version 1.0.0
+ * @version 1.0.2-SNAPSHOT
  */
 /*
  Plugin Name: Navigation Du Lapin Blanc
  Plugin URI: http://www.bjoerne.com/navigation-du-lapin-blanc
  Description: This plugin provides integrated navigation for your website. Thus you can use WordPress as a CMS for your website and think in terms of main navigation, sub navigation etc. A navigation item can link to page, a category, directly to the first sub navigation item (if no own content exist for this item), an external url or a sitemap page. There are a lot of helpful methods to realize a website navigation with little effort like printing the navigation on any level (main, sub, sub sub etc.), searching single navigation items and handle them individually, using cross links in the content, providing a sitemap page and so on.
- Version: 1.0.0
+ Version: 1.0.2-SNAPSHOT
  Author: Björn Weinbrenner
  Author URI: http://www.bjoerne.com/
 
