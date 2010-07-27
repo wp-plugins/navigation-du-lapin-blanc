@@ -2,7 +2,7 @@
 /**
  * @package Bjoerne
  * @subpackage NavigationDuLapinBlanc
- * @version 1.0.2-SNAPSHOT
+ * @version 1.0.1
  */
 /*
  Plugin Name: Navigation Du Lapin Blanc
