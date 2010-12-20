@@ -2,7 +2,7 @@
 /**
  * @package Bjoerne
  * @subpackage NavigationDuLapinBlanc
- * @version 1.0.2-SNAPSHOT
+ * @version 1.0.2
  * Classes used by navigation-du-lapin-blanc WordPress plugin
  */
 

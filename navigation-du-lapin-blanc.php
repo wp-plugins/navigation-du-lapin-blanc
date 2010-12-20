@@ -2,13 +2,13 @@
 /**
  * @package Bjoerne
  * @subpackage NavigationDuLapinBlanc
- * @version 1.0.2-SNAPSHOT
+ * @version 1.0.2
  */
 /*
  Plugin Name: Navigation Du Lapin Blanc
  Plugin URI: http://www.bjoerne.com/navigation-du-lapin-blanc
  Description: This plugin provides integrated navigation for your website. Thus you can use WordPress as a CMS for your website and think in terms of main navigation, sub navigation etc. A navigation item can link to page, a category, directly to the first sub navigation item (if no own content exist for this item), an external url or a sitemap page. There are a lot of helpful methods to realize a website navigation with little effort like printing the navigation on any level (main, sub, sub sub etc.), searching single navigation items and handle them individually, using cross links in the content, providing a sitemap page and so on.
- Version: 1.0.2-SNAPSHOT
+ Version: 1.0.2
  Author: Björn Weinbrenner
  Author URI: http://www.bjoerne.com/
 
@@ -51,17 +51,17 @@ function bjoerne_init() {
 	$GLOBALS['bjoerne_root_nodes'] =& $rootNodes;
 	$currentNode =& bjoerne_find_current_node($rootNodes);
 	if (null != $currentNode) {
+		$pathReverse = array();
 		$currentNode->set_selected(true);
 		$GLOBALS['bjoerne_current_node'] =& $currentNode;
-		$path = array();
-		$path[] =& $currentNode;
+		$pathReverse[] =& $currentNode;
 		$iNode =& $currentNode->get_parent();
 		while (null != $iNode) {
 			$iNode->set_on_selected_path(true);
-			$path[] =& $iNode;
+			$pathReverse[] =& $iNode;
 			$iNode =& $iNode->get_parent();
 		}
-		$GLOBALS['bjoerne_current_path'] =& array_reverse($path);
+		$GLOBALS['bjoerne_current_path'] =& array_reverse($pathReverse);
 	}
 	// register resolvers
 	bjoerne_register_name_resolver(new Bjoerne_NameFromMetadataResolver());
@@ -96,6 +96,23 @@ function bjoerne_filter_content($content) {
 }
 
 /**
+ * This method is registered as a posts where filter and avoids that technical sites (e.g. delegating to first child)
+ * are considered of the query.
+ * @access private
+ * @param String $where
+ * @return String the filtered where statement
+ */
+function bjoerne_filter_posts_where($where) {
+	if (is_user_logged_in()) {
+		return $where;
+	}
+	global $wpdb;
+	$inner_where = "meta_key='bjoerne_page_type' AND meta_value='delegate_to_first_child'";
+	$where .= " AND $wpdb->posts.ID NOT IN (SELECT post_id FROM $wpdb->postmeta WHERE $inner_where)";
+	return $where;
+}
+
+/**
  * @access private
  * @param $rootNodes
  * @return Bjoerne_PageNode the found node
@@ -103,7 +120,7 @@ function bjoerne_filter_content($content) {
 function &bjoerne_find_current_node(&$rootNodes) {
 	if (is_page()) {
 		global $page_id;
-		if (!$page) {
+		if (!$page_id) {
 			global $wp_query;
 			$page_obj = $wp_query->get_queried_object();
 			$page_id = $page_obj->ID;
@@ -131,7 +148,7 @@ function &bjoerne_find_current_node(&$rootNodes) {
  * @return @return Bjoerne_PageNode the found node
  */
 function &bjoerne_get_current_path_element($level) {
-	$path = &$GLOBALS['bjoerne_current_path'];
+	$path = &bjoerne_get_current_path_elements();
 	if ($level > sizeof($path)) {
 		return null;
 	}
@@ -144,7 +161,15 @@ function &bjoerne_get_current_path_element($level) {
  * @return array Array of nodes
  */
 function &bjoerne_get_current_path_elements() {
-	return $GLOBALS['bjoerne_current_path'];
+	if (array_key_exists('bjoerne_current_path', $GLOBALS)) {
+		$current_path =& $GLOBALS['bjoerne_current_path'];
+		$result = array();
+		for ($i=0; $i<sizeof($current_path); $i++) {
+			$result[$i] =& $current_path[$i];
+		}
+		return $result;
+	}
+	return bjoerne_empty_array();
 }
 
 /**
@@ -282,6 +307,9 @@ function bjoerne_get_sitemap_internal($nodes) {
  * @return array
  */
 function &bjoerne_get_metadata_values(&$node, $attr_name, $inherit = false) {
+	if (null == $node) {
+		return null;
+	}
 	$metadata =& $node->get_metadata();
 	if ((null == $metadata) || !array_key_exists($attr_name, $metadata)) {
 		if ($inherit && (null != $node->get_parent())) {
@@ -476,6 +504,9 @@ function bjoerne_get_link(&$node, $args = null) {
 	}
 	if (!($visible || bjoerne_is_node_visible($node))) {
 		return "";
+	}
+	if (null == $node) {
+		echo 'X';
 	}
 	$metadata = $node->get_metadata();
 	$style_class = bjoerne_array_get('style_class', $args);
@@ -711,8 +742,8 @@ function &bjoerne_empty_array() {
 
 add_action('template_redirect', 'bjoerne_init');
 add_filter('the_content', 'bjoerne_filter_content');
+add_filter('posts_where', 'bjoerne_filter_posts_where');
 add_shortcode('bjoerne_sitemap', 'bjoerne_get_sitemap');
 add_shortcode('bjoerne_link', 'bjoerne_get_link_shortcode');
-
 
 ?>
