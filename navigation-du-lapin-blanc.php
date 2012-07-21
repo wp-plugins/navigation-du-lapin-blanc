@@ -2,13 +2,13 @@
 /**
  * @package Bjoerne
  * @subpackage NavigationDuLapinBlanc
- * @version 1.0.3
+ * @version 1.0.4
  */
 /*
  Plugin Name: Navigation Du Lapin Blanc
  Plugin URI: http://www.bjoerne.com/navigation-du-lapin-blanc
  Description: This plugin provides integrated navigation for your website. Thus you can use WordPress as a CMS for your website and think in terms of main navigation, sub navigation etc. A navigation item can link to page, a category, directly to the first sub navigation item (if no own content exist for this item), an external url or a sitemap page. There are a lot of helpful methods to realize a website navigation with little effort like printing the navigation on any level (main, sub, sub sub etc.), searching single navigation items and handle them individually, using cross links in the content, providing a sitemap page and so on.
- Version: 1.0.3
+ Version: 1.0.4
  Author: Björn Weinbrenner
  Author URI: http://www.bjoerne.com/
 
@@ -572,46 +572,14 @@ function bjoerne_get_link(&$node, $args = null) {
 	if (!($visible || bjoerne_is_node_visible($node))) {
 		return "";
 	}
-	if (null == $node) {
-		echo 'X';
-	}
 	$metadata = $node->get_metadata();
-	$style_class = bjoerne_array_get('style_class', $args);
-	$style_class_metadata = bjoerne_get_metadata_single($node, 'bjoerne_link_attribute:style_class');
-	if (null != $style_class_metadata) {
-		if (null == $style_class) {
-			$style_class = $style_class_metadata;
-		} else {
-			$style_class .= ' '.$style_class_metadata;
-		}
-	}
-	$style = bjoerne_array_get('style_class', $args);
-	$style_metadata = bjoerne_get_metadata_single($node, 'bjoerne_link_attribute:style');
-	if (null != $style_metadata) {
-		if (null == $style) {
-			$style = $style_metadata;
-		} else {
-			$style_ .= $style_metadata;
-		}
-	}
-	$selected_class = bjoerne_array_get('selected_class', $args);
-	$selected_class_metadata = bjoerne_get_metadata_single($node, 'bjoerne_link_attribute:selected_class');
-	if (null != $selected_class_metadata) {
-		if (null == $selected_class) {
-			$selected_class = $selected_class_metadata;
-		} else {
-			$selected_class .= ' '.$selected_class_metadata;
-		}
-	}
-	$selected_style = bjoerne_array_get('selected_style', $args);
-	$selected_style_metadata = bjoerne_get_metadata_single($node, 'bjoerne_link_attribute:selected_style');
-	if (null != $selected_style_metadata) {
-		if (null == $selected_style) {
-			$selected_style = $selected_style_metadata;
-		} else {
-			$selected_style .= ' '.$selected_style_metadata;
-		}
-	}
+	$style_class = bjoerne_get_link_attribute($node, $args, 'style_class');
+	$style = bjoerne_get_link_attribute($node, $args, 'style');
+	$selected_class = bjoerne_get_link_attribute($node, $args, 'selected_class');
+	$selected_style = bjoerne_get_link_attribute($node, $args, 'selected_style');
+	$onmouseover = bjoerne_get_link_attribute($node, $args, 'onmouseover');
+	$onmouseout = bjoerne_get_link_attribute($node, $args, 'onmouseout');
+	$onclick = bjoerne_get_link_attribute($node, $args, 'onclick');
 	if ($node->is_selected()) {
 		if (null == $style_class) {
 			$style_class = $selected_class;
@@ -652,11 +620,40 @@ function bjoerne_get_link(&$node, $args = null) {
 	if (null != $target) {
 		$result .= ' target="'.$target.'"';
 	}
+	if (null != $onmouseover) {
+		$result .= ' onmouseover="'.$onmouseover.'"';
+	}
+	if (null != $onmouseout) {
+		$result .= ' onmouseout="'.$onmouseout.'"';
+	}
+	if (null != $onclick) {
+		$result .= ' onclick="'.$onclick.'"';
+	}
 	$result .= '>'.$node->get_name().'</a>';
 	if (null != $after_link) {
 		$result .= $after_link;
 	}
 	return $result;
+}
+
+/**
+ * Returns an attribute used for the html link. The value is based on the given args (e.g. args contains an entry style => color:red) and configured metadata
+ * (e.g. bjoerne_link_attribute:style=color: red;). The values are concatenated if both are found.
+ * @param $node
+ * @param $args
+ * @param $attribute_name
+ */
+function bjoerne_get_link_attribute(&$node, $args = null, $attribute_name) {
+	$value = bjoerne_array_get($attribute_name, $args);
+	$attribute_metadata = bjoerne_get_metadata_single($node, 'bjoerne_link_attribute:'.$attribute_name);
+	if (null != $attribute_metadata) {
+		if (null == $value) {
+			$value = $attribute_metadata;
+		} else {
+			$value .= ' '.$attribute_metadata;
+		}
+	}
+	return $value;
 }
 
 /**
