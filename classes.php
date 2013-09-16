@@ -2,7 +2,7 @@
 /**
  * @package Bjoerne
  * @subpackage NavigationDuLapinBlanc
- * @version 1.0.4
+ * @version 1.0.5
  * Classes used by navigation-du-lapin-blanc WordPress plugin
  */
 
@@ -379,7 +379,8 @@ class Bjoerne_CategoryUrlResolver extends Bjoerne_PageNodeUrlResolver {
 			}
 			$category_name = bjoerne_get_metadata_single($node, 'bjoerne_category_name');
 			if (null != $category_name) {
-				return get_option( 'home' ).'/?category_name='.$category_name;
+				$category_id = get_cat_ID($category_name);
+				return get_category_link($category_id);
 			}
 		}
 		return null;
