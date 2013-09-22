@@ -1,5 +1,5 @@
 === Plugin Name ===
-Contributors: Björn Weinbrenner
+Contributors: bjoerne
 Donate link: http://www.bjoerne.com/navigation-du-lapin-blanc/?page_id=13
 Tags: navigation, menu, cms, content management system, sitemap, page, category, url, main navigation, sub navigation, metadata, item, web design
 Requires at least: 2.8.0
