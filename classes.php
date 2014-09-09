@@ -379,6 +379,9 @@ class Bjoerne_CategoryUrlResolver extends Bjoerne_PageNodeUrlResolver {
 			}
 			$category_name = bjoerne_get_metadata_single($node, 'bjoerne_category_name');
 			if (null != $category_name) {
+				if (!$category_id) {
+					$category_id = get_category_by_slug($category_name);
+				}
 				$category_id = get_cat_ID($category_name);
 				return get_category_link($category_id);
 			}
