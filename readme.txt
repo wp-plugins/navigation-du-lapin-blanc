@@ -3,8 +3,8 @@ Contributors: bjoerne
 Donate link: http://www.bjoerne.com/navigation-du-lapin-blanc/?page_id=13
 Tags: navigation, menu, cms, content management system, sitemap, page, category, url, main navigation, sub navigation, metadata, item, web design
 Requires at least: 2.8.0
-Tested up to: 3.6.1
-Stable tag: 1.0.5
+Tested up to: 4.0
+Stable tag: trunk
 
 This plugin provides integrated navigation for your website. Use WordPress as a CMS for your website and think in navigation terms (main, sub etc.)
 
@@ -76,4 +76,8 @@ You can find a lot of screenshots on the plugin page. There are a lot of example
 More supported attributes for menu items (onmouseover, onmouseout, onclick)
 
 = 1.0.5 =
-Build link to category with WordPress API instead of concatenating the string
+* Build link to category with WordPress API instead of concatenating the string
+
+= 1.0.6 =
+* Support categery name and category slug to be used as value for bjoerne_category_name when integration categories in the navigation
+* Remove phpDoc from plugin code
