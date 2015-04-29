@@ -3,7 +3,7 @@ Contributors: bjoerne
 Donate link: http://www.bjoerne.com/navigation-du-lapin-blanc/?page_id=13
 Tags: navigation, menu, cms, content management system, sitemap, page, category, url, main navigation, sub navigation, metadata, item, web design
 Requires at least: 2.8.0
-Tested up to: 4.1.1
+Tested up to: 4.2.1
 Stable tag: trunk
 
 This plugin provides integrated navigation for your website. Use WordPress as a CMS for your website and think in navigation terms (main, sub etc.)
